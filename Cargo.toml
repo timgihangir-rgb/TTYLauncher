@@ -1,0 +1,26 @@
+[package]
+name = "ttycraft"
+version = "0.1.0"
+edition = "2024"
+description = "Terminal Minecraft launcher: pick a version, run Minecraft, stream its graphics as ANSI characters"
+
+[dependencies]
+anyhow = "1"
+crossterm = "0.29"
+libc = "0.2"
+mc-launcher-core = "0.1.2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+signal-hook = "0.3"
+ureq = { version = "3", features = ["json"] }
+x11rb = { version = "0.14", features = ["xtest", "xinput", "xfixes", "shm"] }
+
+# The capture → decode → render pipeline runs `w*h` times per frame and must
+# not compete with the JVM for CPU. An unoptimized `cargo run` build was
+# measurably starving the game (~10 fps shown instead of ~20), so optimize the
+# dev profile too; debug symbols are kept.
+[profile.dev]
+opt-level = 2
+
+[[example]]
+name = "halfblock"
